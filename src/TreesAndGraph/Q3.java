@@ -26,6 +26,7 @@ class LinkedListNode {
 public class Q3 {
 
     public static void main(String[] args) {
+        // إنشاء شجرة الاختبار
         TreeNode root = new TreeNode(1);
         root.left = new TreeNode(2);
         root.right = new TreeNode(3);
@@ -34,38 +35,48 @@ public class Q3 {
         root.right.left = new TreeNode(6);
         root.right.right = new TreeNode(7);
 
-        List<LinkedListNode> lists = createLevelLinkedList(root);
+        // إنشاء قائمة من القوائم المرتبطة لكل مستوى في الشجرة
+        List<LinkedListNode> levelLinkedLists = createLevelLinkedList(root);
 
-        printLevelLinkedLists(lists);
+        // طباعة القوائم المرتبطة لكل مستوى
+        printLevelLinkedLists(levelLinkedLists);
     }
 
+    /**
+     * ينشئ قائمة من القوائم المرتبطة حيث يمثل كل مستوى قائمة مرتبطة واحدة.
+     *
+     * @param root جذر شجرة البحث الثنائية.
+     * @return قائمة من القوائم المرتبطة لكل مستوى.
+     */
     public static List<LinkedListNode> createLevelLinkedList(TreeNode root) {
         List<LinkedListNode> result = new ArrayList<>();
         if (root == null) {
             return result;
         }
 
+        // استخدام قائمة انتظار لتتبع العقد لكل مستوى
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
 
         while (!queue.isEmpty()) {
             int size = queue.size();
-            LinkedListNode levelHead = null;
-            LinkedListNode current = null;
+            LinkedListNode levelHead = null; // رأس القائمة المرتبطة للمستوى الحالي
+            LinkedListNode current = null;  // العقدة الحالية في القائمة المرتبطة
 
-            // معالجة العقد في المستوى الحالي
+            // معالجة جميع العقد في المستوى الحالي
             for (int i = 0; i < size; i++) {
                 TreeNode node = queue.poll();
 
                 // إضافة العقدة إلى القائمة المرتبطة
                 LinkedListNode newNode = new LinkedListNode(node.value);
                 if (levelHead == null) {
-                    levelHead = newNode;
+                    levelHead = newNode; // العقدة الأولى في المستوى
                 } else {
-                    current.next = newNode;
+                    current.next = newNode; // ربط العقدة الحالية بالعقدة الجديدة
                 }
                 current = newNode;
 
+                // إضافة الأطفال إلى قائمة الانتظار
                 if (node.left != null) {
                     queue.add(node.left);
                 }
@@ -74,12 +85,18 @@ public class Q3 {
                 }
             }
 
+            // إضافة القائمة المرتبطة للمستوى الحالي إلى النتيجة
             result.add(levelHead);
         }
 
         return result;
     }
 
+    /**
+     * يطبع القوائم المرتبطة التي تمثل كل مستوى في الشجرة.
+     *
+     * @param lists قائمة القوائم المرتبطة.
+     */
     public static void printLevelLinkedLists(List<LinkedListNode> lists) {
         int level = 0;
         for (LinkedListNode head : lists) {
@@ -93,4 +110,3 @@ public class Q3 {
         }
     }
 }
-
